@@ -14,7 +14,7 @@ function Checklist() {
   useEffect(() => {
     const fetchChecklist = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/checklists`);
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/checklists`);
         const foundChecklist = response.data.find(cl => cl.id === id);
         setChecklist(foundChecklist);
       } catch (error) {
@@ -52,7 +52,7 @@ function Checklist() {
     }
 
     try {
-      const response = await axios.post('http://localhost:5000/checklists/upload', formData, {
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/checklists/upload`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -73,7 +73,7 @@ function Checklist() {
     if (window.confirm('Are you sure you want to delete this image?')) {
       try {
         const imagePath = checklist.kontrollpunkter[katIndex].punkter[punktIndex].bilder[bildIndex];
-        await axios.delete('http://localhost:5000/checklists/upload', { data: { imagePath } });
+        await axios.delete(`${process.env.REACT_APP_API_URL}/checklists/upload`, { data: { imagePath } });
 
         setChecklist(prev => {
           const updatedChecklist = { ...prev };
@@ -88,7 +88,7 @@ function Checklist() {
 
   const handleSave = async () => {
     try {
-      await axios.put(`http://localhost:5000/checklists/${id}`, checklist);
+      await axios.put(`${process.env.REACT_APP_API_URL}/checklists/${id}`, checklist);
       alert('Checklist saved!');
     } catch (error) {
       console.error('Error saving checklist:', error);
