@@ -3,4 +3,4 @@
   publish = "build"
 
 [context.production.environment]
-  REACT_APP_API_URL = "https://inlandets-egenkontroll-backend-b7193eb28fb3.herokuapp.com/"
+  REACT_APP_API_URL = "https://inlandets-egenkontroll-backend-b7193eb28fb3.herokuapp.com"
