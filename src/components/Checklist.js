@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Button, TextField, Typography, Grid, Checkbox, FormControlLabel, IconButton } from '@mui/material';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import DeleteIcon from '@mui/icons-material/Delete';
 import axios from 'axios';
 import jsPDF from 'jspdf';
-import { useNavigate } from 'react-router-dom';
 
 function Checklist() {
   const { id } = useParams();
