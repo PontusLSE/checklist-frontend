@@ -6,12 +6,20 @@ import { Edit, FileCopy, Delete } from '@mui/icons-material';
 
 function Home() {
   const [checklists, setChecklists] = useState([]);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     axios.get('/api/checklists').then(response => {
       setChecklists(response.data);
+    }).catch(error => {
+      console.error("There was an error fetching the checklists!", error);
+      setError("There was an error fetching the checklists.");
     });
   }, []);
+
+  if (error) {
+    return <div>{error}</div>;
+  }
 
   return (
     <div>
