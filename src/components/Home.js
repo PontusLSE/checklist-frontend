@@ -10,7 +10,12 @@ function Home() {
 
   useEffect(() => {
     axios.get('/api/checklists').then(response => {
-      setChecklists(response.data);
+      console.log(response.data); // Logga API-svaret
+      if (Array.isArray(response.data)) {
+        setChecklists(response.data);
+      } else {
+        throw new Error("API response is not an array");
+      }
     }).catch(error => {
       console.error("There was an error fetching the checklists!", error);
       setError("There was an error fetching the checklists.");
