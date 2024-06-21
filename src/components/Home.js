@@ -11,7 +11,7 @@ function Home() {
   useEffect(() => {
     const fetchChecklists = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/checklists');
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/checklists`);
         setChecklists(response.data);
       } catch (error) {
         console.error('Error fetching checklists:', error);
@@ -23,10 +23,10 @@ function Home() {
 
   const handleCreateChecklist = async () => {
     try {
-      const templateResponse = await axios.get('http://localhost:5000/checklists/template');
+      const templateResponse = await axios.get(`${process.env.REACT_APP_API_URL}/checklists/template`);
       const newChecklist = { ...templateResponse.data, id: String(Date.now()), projektinformation: { ...templateResponse.data.projektinformation, projektets_namn: newChecklistName } };
 
-      const response = await axios.post('http://localhost:5000/checklists', newChecklist);
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/checklists`, newChecklist);
       setChecklists([...checklists, response.data]);
       setNewChecklistName('');
     } catch (error) {
@@ -35,13 +35,11 @@ function Home() {
   };
 
   const deleteChecklist = async (id) => {
-    if (window.confirm('Are you sure you want to delete this checklist?')) {
-      try {
-        await axios.delete(`http://localhost:5000/checklists/${id}`);
-        setChecklists(checklists.filter(checklist => checklist.id !== id));
-      } catch (error) {
-        console.error('Error deleting checklist:', error);
-      }
+    try {
+      await axios.delete(`${process.env.REACT_APP_API_URL}/checklists/${id}`);
+      setChecklists(checklists.filter(checklist => checklist.id !== id));
+    } catch (error) {
+      console.error('Error deleting checklist:', error);
     }
   };
 
