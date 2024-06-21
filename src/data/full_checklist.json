@@ -1,0 +1,249 @@
+{
+  "projektinformation": {
+    "kundens_namn": "[Ange kundens namn]",
+    "kundens_adress": "[Ange kundens adress]",
+    "namn_pa_kundens_referens": "[Ange kundens referens]",
+    "utfors_av": "[Ange företaget]",
+    "arbetsledare": "[Ange arbetsledarens namn]",
+    "projektets_nummer": "[Ange projektets nummer]",
+    "projektets_namn": "[Ange projektets namn]",
+    "aktuellt_datum": "[Ange aktuellt datum]"
+  },
+  "kontrollpunkter": [
+    {
+      "kategori": "Layout",
+      "punkter": [
+        {
+          "kontrollpunkt": "Gå igenom projektet med kund innan start",
+          "utförd": false,
+          "kommentarer": "",
+          "bilder": []
+        },
+        {
+          "kontrollpunkt": "Solpanelerna är placerade enligt projektering",
+          "utförd": false,
+          "kommentarer": "",
+          "bilder": []
+        },
+        {
+          "kontrollpunkt": "Växelriktaren är placerad enligt projektering",
+          "utförd": false,
+          "kommentarer": "",
+          "bilder": []
+        }
+      ]
+    },
+    {
+      "kategori": "Montagedetaljer",
+      "punkter": [
+        {
+          "kontrollpunkt": "Samtliga ändlock monterade",
+          "utförd": false,
+          "kommentarer": "",
+          "bilder": []
+        },
+        {
+          "kontrollpunkt": "Samtliga mitt/ändklämmor åtdragna",
+          "utförd": false,
+          "kommentarer": "",
+          "bilder": []
+        },
+        {
+          "kontrollpunkt": "Samtliga montagedetaljer är nya och oanvända",
+          "utförd": false,
+          "kommentarer": "",
+          "bilder": []
+        },
+        {
+          "kontrollpunkt": "Infästningsdetaljer monterade enligt tillverkarens rekommendation gällande CC-mått och antal infästning",
+          "utförd": false,
+          "kommentarer": "",
+          "bilder": []
+        },
+        {
+          "kontrollpunkt": "Montering utförd enligt ritningar",
+          "utförd": false,
+          "kommentarer": "",
+          "bilder": []
+        }
+      ]
+    },
+    {
+      "kategori": "Kablar och kontakter",
+      "punkter": [
+        {
+          "kontrollpunkt": "Rätt typ av kabel och kontakter har använts",
+          "utförd": false,
+          "kommentarer": "",
+          "bilder": []
+        },
+        {
+          "kontrollpunkt": "Kontakter crimpade med MC4-presståg",
+          "utförd": false,
+          "kommentarer": "",
+          "bilder": []
+        },
+        {
+          "kontrollpunkt": "Kontakter klickade och åtskruvade",
+          "utförd": false,
+          "kommentarer": "",
+          "bilder": []
+        },
+        {
+          "kontrollpunkt": "Kablar är hela ej klämda och utan brott",
+          "utförd": false,
+          "kommentarer": "",
+          "bilder": []
+        },
+        {
+          "kontrollpunkt": "Kablar är förlagda i slang efter behov",
+          "utförd": false,
+          "kommentarer": "",
+          "bilder": []
+        },
+        {
+          "kontrollpunkt": "Oskyddade kablar under paneler hängda med max CC 30cm längs skena",
+          "utförd": false,
+          "kommentarer": "",
+          "bilder": []
+        },
+        {
+          "kontrollpunkt": "Kabel vid genomföringar är skavsäkrade och tätade",
+          "utförd": false,
+          "kommentarer": "",
+          "bilder": []
+        },
+        {
+          "kontrollpunkt": "Kablar är gnagarsäkra och sparkskyddade",
+          "utförd": false,
+          "kommentarer": "",
+          "bilder": []
+        },
+        {
+          "kontrollpunkt": "Kabeldragning och infästning utförd med betryggande säkerhet mot skador av kablar kontaktdon från yttre påverkan",
+          "utförd": false,
+          "kommentarer": "",
+          "bilder": []
+        },
+        {
+          "kontrollpunkt": "Kabelgenomföringar är vädersäkrade",
+          "utförd": false,
+          "kommentarer": "",
+          "bilder": []
+        }
+      ]
+    },
+    {
+      "kategori": "Slingor",
+      "punkter": [
+        {
+          "kontrollpunkt": "Samtliga slingor är uppmärkta med klisterlappar",
+          "utförd": false,
+          "kommentarer": "",
+          "bilder": []
+        },
+        {
+          "kontrollpunkt": "Förenklat enlinjeschema uppritat och dokumenterat",
+          "utförd": false,
+          "kommentarer": "",
+          "bilder": []
+        },
+        {
+          "kontrollpunkt": "Ev. QR-koder inskannade vid optimering",
+          "utförd": false,
+          "kommentarer": "",
+          "bilder": []
+        }
+      ]
+    },
+    {
+      "kategori": "Kabeldragning",
+      "punkter": [
+        {
+          "kontrollpunkt": "Kabeldragning så långt som möjligt är utförd så att plus och minus ligger nära varandra",
+          "utförd": false,
+          "kommentarer": "",
+          "bilder": []
+        },
+        {
+          "kontrollpunkt": "Överspänningsskydd där sådana behövs är rätt utvalda och monterade",
+          "utförd": false,
+          "kommentarer": "",
+          "bilder": []
+        },
+        {
+          "kontrollpunkt": "DC-frånskiljare finns på DC-sidan av växelriktaren (kan vara inbyggd i växelriktaren)",
+          "utförd": false,
+          "kommentarer": "",
+          "bilder": []
+        }
+      ]
+    },
+    {
+      "kategori": "Driftsättning",
+      "punkter": [
+        {
+          "kontrollpunkt": "Anslutning till internet",
+          "utförd": false,
+          "kommentarer": "",
+          "bilder": []
+        },
+        {
+          "kontrollpunkt": "Landskod inställd på växelriktaren",
+          "utförd": false,
+          "kommentarer": "",
+          "bilder": []
+        },
+        {
+          "kontrollpunkt": "Kund har app installerad och är instruerad om hur de ser sin produktion",
+          "utförd": false,
+          "kommentarer": "",
+          "bilder": []
+        },
+        {
+          "kontrollpunkt": "Funktionstestat anläggningen",
+          "utförd": false,
+          "kommentarer": "",
+          "bilder": []
+        }
+      ]
+    },
+    {
+      "kategori": "Arbetsplats",
+      "punkter": [
+        {
+          "kontrollpunkt": "Arbetsplatsen är städad och återställd som när vi kom",
+          "utförd": false,
+          "kommentarer": "",
+          "bilder": []
+        },
+        {
+          "kontrollpunkt": "Har ni gått igenom projektet med kunden efteråt",
+          "utförd": false,
+          "kommentarer": "",
+          "bilder": []
+        }
+      ]
+    },
+    {
+      "kategori": "Övrigt",
+      "punkter": [
+        {
+          "kontrollpunkt": "Övriga kommentarer",
+          "utförd": false,
+          "kommentarer": "",
+          "bilder": []
+        },
+        {
+          "kontrollpunkt": "Övrigt - bilder",
+          "utförd": false,
+          "kommentarer": "",
+          "bilder": []
+        }
+      ]
+    }
+  ],
+  "signering": {
+    "signering_ledande_montor": ""
+  }
+}

@@ -1,0 +1,18 @@
+[
+  {
+    "id": 1,
+    "title": "Checklist 1",
+    "items": [
+      { "text": "Item 1.1", "completed": false, "comments": "" },
+      { "text": "Item 1.2", "completed": false, "comments": "" }
+    ]
+  },
+  {
+    "id": 2,
+    "title": "Checklist 2",
+    "items": [
+      { "text": "Item 2.1", "completed": false, "comments": "" },
+      { "text": "Item 2.2", "completed": false, "comments": "" }
+    ]
+  }
+]

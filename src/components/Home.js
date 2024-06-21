@@ -1,0 +1,80 @@
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { Typography, List, ListItem, ListItemText, ListItemSecondaryAction, IconButton, TextField, Button } from '@mui/material';
+import { Edit, Delete } from '@mui/icons-material';
+import axios from 'axios';
+
+function Home() {
+  const [checklists, setChecklists] = useState([]);
+  const [newChecklistName, setNewChecklistName] = useState('');
+
+  useEffect(() => {
+    const fetchChecklists = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/checklists');
+        setChecklists(response.data);
+      } catch (error) {
+        console.error('Error fetching checklists:', error);
+      }
+    };
+
+    fetchChecklists();
+  }, []);
+
+  const handleCreateChecklist = async () => {
+    try {
+      const templateResponse = await axios.get('http://localhost:5000/checklists/template');
+      const newChecklist = { ...templateResponse.data, id: String(Date.now()), projektinformation: { ...templateResponse.data.projektinformation, projektets_namn: newChecklistName } };
+
+      const response = await axios.post('http://localhost:5000/checklists', newChecklist);
+      setChecklists([...checklists, response.data]);
+      setNewChecklistName('');
+    } catch (error) {
+      console.error('Error creating checklist:', error);
+    }
+  };
+
+  const deleteChecklist = async (id) => {
+    if (window.confirm('Are you sure you want to delete this checklist?')) {
+      try {
+        await axios.delete(`http://localhost:5000/checklists/${id}`);
+        setChecklists(checklists.filter(checklist => checklist.id !== id));
+      } catch (error) {
+        console.error('Error deleting checklist:', error);
+      }
+    }
+  };
+
+  return (
+    <div>
+      <Typography variant="h4" gutterBottom>List of checklists:</Typography>
+      <List>
+        {checklists.map((checklist) => (
+          <ListItem key={checklist.id}>
+            <ListItemText primary={checklist.projektinformation.projektets_namn} />
+            <ListItemSecondaryAction>
+              <IconButton edge="end" component={Link} to={`/checklist/${checklist.id}`}>
+                <Edit />
+              </IconButton>
+              <IconButton edge="end" onClick={() => deleteChecklist(checklist.id)}>
+                <Delete />
+              </IconButton>
+            </ListItemSecondaryAction>
+          </ListItem>
+        ))}
+      </List>
+      <div>
+        <TextField
+          label="New Checklist Name"
+          value={newChecklistName}
+          onChange={(e) => setNewChecklistName(e.target.value)}
+        />
+        <Button variant="contained" color="primary" onClick={handleCreateChecklist}>
+          Create Checklist
+        </Button>
+      </div>
+    </div>
+  );
+}
+
+export default Home;
