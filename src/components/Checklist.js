@@ -171,19 +171,4 @@ function Checklist() {
                       <img src={bild} alt={`upload-${bildIndex}`} style={{ maxWidth: '100px', margin: '5px' }} />
                       <IconButton color="secondary" onClick={() => handleFileDelete(katIndex, punktIndex, bildIndex)}>
                         <DeleteIcon />
-                      </IconButton>
-                    </div>
-                  ))}
-                </div>
-              </Grid>
-            ))}
-          </Grid>
-        </div>
-      ))}
-      <Button variant="contained" color="primary" onClick={handleSave}>Save</Button>
-      <Button variant="contained" color="secondary" onClick={handleExportPDF}>Export as PDF</Button>
-    </div>
-  );
-}
-
-export default Checklist;
+                      </
