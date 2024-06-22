@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Typography, List, ListItem, ListItemText, ListItemSecondaryAction, IconButton, TextField, Button } from '@mui/material';
+import { Typography, List, ListItem, ListItemText, ListItemSecondaryAction, IconButton, TextField, Button, Container } from '@mui/material';
 import { Edit, Delete } from '@mui/icons-material';
 import axios from 'axios';
 
@@ -48,7 +48,7 @@ function Home() {
   };
 
   return (
-    <div>
+    <Container>
       <Typography variant="h4" gutterBottom>Egenkontroller</Typography>
       <List>
         {checklists.map((checklist) => (
@@ -75,7 +75,7 @@ function Home() {
           Create Checklist
         </Button>
       </div>
-    </div>
+    </Container>
   );
 }
 
