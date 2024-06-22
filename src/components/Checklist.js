@@ -80,7 +80,7 @@ function Checklist() {
 
   const handleExportPDF = () => {
     const doc = new jsPDF();
-    doc.addImage('logga.png', 'PNG', 10, 10, 50, 50); // Justera vägen till loggan
+    doc.addImage('/logga.png', 'PNG', 10, 10, 50, 50); // Justera vägen till loggan
     doc.text('Egenkontroll solcellsmontage', 10, 70);
 
     const projektinfo = checklist.projektinformation;
