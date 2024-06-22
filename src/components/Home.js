@@ -45,7 +45,7 @@ function Home() {
 
   return (
     <div>
-      <Typography variant="h4" gutterBottom>List of checklists:</Typography>
+      <Typography variant="h4" gutterBottom>Egenkontroller</Typography>
       <List>
         {checklists.map((checklist) => (
           <ListItem key={checklist.id}>
