@@ -1,263 +1,227 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { Typography, Grid, FormControlLabel, Checkbox, TextField, Button, IconButton, Container } from '@mui/material';
-import { PhotoCamera, Delete as DeleteIcon } from '@mui/icons-material';
+import { useParams, useHistory } from 'react-router-dom';
 import axios from 'axios';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 
-function Checklist() {
+const Checklist = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
+  const history = useHistory();
   const [checklist, setChecklist] = useState(null);
+  const [newComment, setNewComment] = useState('');
+  const [newImage, setNewImage] = useState(null);
 
   useEffect(() => {
-    const fetchChecklist = async () => {
-      try {
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/checklists/${id}`);
-        setChecklist(response.data);
-      } catch (error) {
-        console.error('Error fetching checklist:', error);
-      }
-    };
-
     fetchChecklist();
-  }, [id]);
+  }, []);
 
-  const handleProjectInfoChange = (event) => {
-    const { name, value } = event.target;
-    setChecklist((prevChecklist) => ({
-      ...prevChecklist,
-      projektinformation: {
-        ...prevChecklist.projektinformation,
-        [name]: value,
-      },
-    }));
-  };
-
-  const handleCheckboxChange = (event, katIndex, punktIndex) => {
-    const updatedChecklist = { ...checklist };
-    updatedChecklist.kontrollpunkter[katIndex].punkter[punktIndex].utförd = event.target.checked;
-    setChecklist(updatedChecklist);
-  };
-
-  const handleCommentChange = (event, katIndex, punktIndex) => {
-    const updatedChecklist = { ...checklist };
-    updatedChecklist.kontrollpunkter[katIndex].punkter[punktIndex].kommentarer = event.target.value;
-    setChecklist(updatedChecklist);
-  };
-
-  const handleFileUpload = async (event, katIndex, punktIndex) => {
-    const files = event.target.files;
-    const formData = new FormData();
-    for (let i = 0; i < files.length; i++) {
-      formData.append('files', files[i]);
-    }
-
+  const fetchChecklist = async () => {
     try {
-      const response = await axios.post(`${process.env.REACT_APP_API_URL}/checklists/upload`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      const updatedChecklist = { ...checklist };
-      updatedChecklist.kontrollpunkter[katIndex].punkter[punktIndex].bilder.push(...response.data);
-      setChecklist(updatedChecklist);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/checklists/${id}`);
+      setChecklist(response.data);
     } catch (error) {
-      console.error('Error uploading files:', error);
-    }
-  };
-
-  const handleFileDelete = async (katIndex, punktIndex, bildIndex) => {
-    try {
-      const updatedChecklist = { ...checklist };
-      const deletedImage = updatedChecklist.kontrollpunkter[katIndex].punkter[punktIndex].bilder[bildIndex];
-      await axios.delete(`${process.env.REACT_APP_API_URL}/checklists/upload`, { data: { url: deletedImage } });
-      updatedChecklist.kontrollpunkter[katIndex].punkter[punktIndex].bilder.splice(bildIndex, 1);
-      setChecklist(updatedChecklist);
-    } catch (error) {
-      console.error('Error deleting image:', error);
+      console.error('Error fetching checklist:', error);
     }
   };
 
   const handleSave = async () => {
     try {
       await axios.put(`${process.env.REACT_APP_API_URL}/checklists/${id}`, checklist);
-      alert('Checklist saved successfully!');
+      alert('Checklist saved successfully');
     } catch (error) {
       console.error('Error saving checklist:', error);
     }
   };
 
-  const handleExportPDF = () => {
-    const doc = new jsPDF();
-    doc.addImage('/logga.png', 'PNG', 10, 10, 50, 50);
-    doc.text('Egenkontroll solcellsmontage', 10, 70);
+  const handleFileUpload = async (event) => {
+    const file = event.target.files[0];
+    const formData = new FormData();
+    formData.append('file', file);
 
-    const projektinfo = checklist.projektinformation;
-    doc.text(`Kundens namn: ${projektinfo.kundens_namn}`, 10, 80);
-    doc.text(`Kundens adress: ${projektinfo.kundens_adress}`, 10, 90);
-    doc.text(`Kundens referens: ${projektinfo.kundens_referens}`, 10, 100);
-    doc.text(`Utförs av: ${projektinfo.utfors_av}`, 10, 110);
-    doc.text(`Arbetsledare: ${projektinfo.arbetsledare}`, 10, 120);
-    doc.text(`Projektets nummer: ${projektinfo.projektets_nummer}`, 10, 130);
-    doc.text(`Projektets namn: ${projektinfo.projektets_namn}`, 10, 140);
-    doc.text(`Aktuellt datum: ${projektinfo.aktuellt_datum}`, 10, 150);
-
-    checklist.kontrollpunkter.forEach((kategori, katIndex) => {
-      doc.addPage();
-      doc.text(kategori.kategori, 10, 20);
-      kategori.punkter.forEach((punkt, punktIndex) => {
-        doc.text(`${punkt.kontrollpunkt}: ${punkt.utförd ? 'Ja' : 'Nej'} - ${punkt.kommentarer}`, 10, 30 + punktIndex * 10);
+    try {
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/checklists/upload`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
       });
-    });
-
-    doc.save('checklist.pdf');
+      setChecklist({
+        ...checklist,
+        images: [...(checklist.images || []), response.data.url]
+      });
+    } catch (error) {
+      console.error('Error uploading files:', error);
+    }
   };
 
-  if (!checklist) {
-    return <Typography>Loading...</Typography>;
-  }
+  const handleFileDelete = async (url) => {
+    if (!window.confirm('Are you sure you want to delete this image?')) return;
+
+    try {
+      await axios.delete(`${process.env.REACT_APP_API_URL}/checklists/upload`, { data: { url } });
+      setChecklist({
+        ...checklist,
+        images: checklist.images.filter(image => image !== url)
+      });
+    } catch (error) {
+      console.error('Error deleting image:', error);
+    }
+  };
+
+  const handleExportPDF = () => {
+    const doc = new jsPDF();
+    doc.addImage('/logga.png', 'PNG', 10, 10, 50, 20);
+    doc.setFontSize(18);
+    doc.text('Egenkontroll Solcellssystem', 70, 20);
+    doc.setFontSize(12);
+    doc.text(`Kundens namn: ${checklist.projektinformation.kundens_namn}`, 10, 40);
+    doc.text(`Kundens adress: ${checklist.projektinformation.kundens_adress}`, 10, 50);
+    doc.text(`Kundens referens: ${checklist.projektinformation.kundens_referens}`, 10, 60);
+    doc.text(`Utförs av: ${checklist.projektinformation.utfors_av}`, 10, 70);
+    doc.text(`Arbetsledare: ${checklist.projektinformation.arbetsledare}`, 10, 80);
+    doc.text(`Projektets nummer: ${checklist.projektinformation.projektets_nummer}`, 10, 90);
+    doc.text(`Projektets namn: ${checklist.projektinformation.projektets_namn}`, 10, 100);
+    doc.text(`Aktuellt datum: ${checklist.projektinformation.aktuellt_datum}`, 10, 110);
+
+    const tableColumn = ["Kontrollpunkt", "Utförd", "Kommentar"];
+    const tableRows = [];
+
+    checklist.kontrollpunkter.forEach(kontrollpunkt => {
+      const kontrolldata = [
+        kontrollpunkt.punkt,
+        kontrollpunkt.utförd ? "Ja" : "Nej",
+        kontrollpunkt.kommentar || ""
+      ];
+      tableRows.push(kontrolldata);
+    });
+
+    doc.autoTable(tableColumn, tableRows, { startY: 120 });
+    doc.save('egenkontroll.pdf');
+  };
+
+  const handleInputChange = (event, index) => {
+    const { name, value, type, checked } = event.target;
+    const updatedKontrollpunkter = [...checklist.kontrollpunkter];
+
+    if (type === 'checkbox') {
+      updatedKontrollpunkter[index][name] = checked;
+    } else {
+      updatedKontrollpunkter[index][name] = value;
+    }
+
+    setChecklist({ ...checklist, kontrollpunkter: updatedKontrollpunkter });
+  };
+
+  const handleBack = () => {
+    history.push('/');
+  };
+
+  if (!checklist) return <div>Loading...</div>;
 
   return (
-    <Container>
-      <Typography variant="h4" gutterBottom>Egenkontroll</Typography>
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <TextField
-            label="Kundens namn"
-            name="kundens_namn"
+    <div>
+      <h1>Egenkontroll Solcellssystem</h1>
+      <button onClick={handleBack}>Tillbaka</button>
+      <div>
+        <label>
+          Kundens namn:
+          <input
+            type="text"
             value={checklist.projektinformation.kundens_namn}
-            onChange={handleProjectInfoChange}
-            fullWidth
+            onChange={e => setChecklist({ ...checklist, projektinformation: { ...checklist.projektinformation, kundens_namn: e.target.value } })}
           />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            label="Kundens adress"
-            name="kundens_adress"
+        </label>
+        <label>
+          Kundens adress:
+          <input
+            type="text"
             value={checklist.projektinformation.kundens_adress}
-            onChange={handleProjectInfoChange}
-            fullWidth
+            onChange={e => setChecklist({ ...checklist, projektinformation: { ...checklist.projektinformation, kundens_adress: e.target.value } })}
           />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            label="Kundens referens"
-            name="kundens_referens"
+        </label>
+        <label>
+          Kundens referens:
+          <input
+            type="text"
             value={checklist.projektinformation.kundens_referens}
-            onChange={handleProjectInfoChange}
-            fullWidth
+            onChange={e => setChecklist({ ...checklist, projektinformation: { ...checklist.projektinformation, kundens_referens: e.target.value } })}
           />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            label="Utförs av"
-            name="utfors_av"
+        </label>
+        <label>
+          Utförs av:
+          <input
+            type="text"
             value={checklist.projektinformation.utfors_av}
-            onChange={handleProjectInfoChange}
-            fullWidth
+            onChange={e => setChecklist({ ...checklist, projektinformation: { ...checklist.projektinformation, utfors_av: e.target.value } })}
           />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            label="Arbetsledare"
-            name="arbetsledare"
+        </label>
+        <label>
+          Arbetsledare:
+          <input
+            type="text"
             value={checklist.projektinformation.arbetsledare}
-            onChange={handleProjectInfoChange}
-            fullWidth
+            onChange={e => setChecklist({ ...checklist, projektinformation: { ...checklist.projektinformation, arbetsledare: e.target.value } })}
           />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            label="Projektets nummer"
-            name="projektets_nummer"
+        </label>
+        <label>
+          Projektets nummer:
+          <input
+            type="text"
             value={checklist.projektinformation.projektets_nummer}
-            onChange={handleProjectInfoChange}
-            fullWidth
+            onChange={e => setChecklist({ ...checklist, projektinformation: { ...checklist.projektinformation, projektets_nummer: e.target.value } })}
           />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            label="Projektets namn"
-            name="projektets_namn"
+        </label>
+        <label>
+          Projektets namn:
+          <input
+            type="text"
             value={checklist.projektinformation.projektets_namn}
-            onChange={handleProjectInfoChange}
-            fullWidth
+            onChange={e => setChecklist({ ...checklist, projektinformation: { ...checklist.projektinformation, projektets_namn: e.target.value } })}
           />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            label="Aktuellt datum"
-            name="aktuellt_datum"
+        </label>
+        <label>
+          Aktuellt datum:
+          <input
+            type="text"
             value={checklist.projektinformation.aktuellt_datum}
-            onChange={handleProjectInfoChange}
-            fullWidth
+            onChange={e => setChecklist({ ...checklist, projektinformation: { ...checklist.projektinformation, aktuellt_datum: e.target.value } })}
           />
-        </Grid>
-      </Grid>
-      {checklist.kontrollpunkter.map((kategori, katIndex) => (
-        <div key={katIndex}>
-          <Typography variant="h6">{kategori.kategori}</Typography>
-          {kategori.punkter.map((punkt, punktIndex) => (
-            <Grid container spacing={2} key={punktIndex} alignItems="center">
-              <Grid item xs={12} sm={6}>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={punkt.utförd}
-                      onChange={(event) => handleCheckboxChange(event, katIndex, punktIndex)}
-                    />
-                  }
-                  label={punkt.kontrollpunkt}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  label="Kommentarer"
-                  value={punkt.kommentarer}
-                  onChange={(event) => handleCommentChange(event, katIndex, punktIndex)}
-                  fullWidth
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <input
-                  accept="image/*"
-                  style={{ display: 'none' }}
-                  id={`icon-button-file-${katIndex}-${punktIndex}`}
-                  type="file"
-                  multiple
-                  onChange={(event) => handleFileUpload(event, katIndex, punktIndex)}
-                />
-                <label htmlFor={`icon-button-file-${katIndex}-${punktIndex}`}>
-                  <IconButton color="primary" component="span">
-                    <PhotoCamera />
-                  </IconButton>
-                </label>
-              </Grid>
-              {punkt.bilder.map((bild, bildIndex) => (
-                <Grid item xs={12} sm={6} key={bildIndex}>
-                  <img src={bild} alt={`uploaded ${bildIndex}`} style={{ maxWidth: '100%' }} />
-                  <IconButton onClick={() => handleFileDelete(katIndex, punktIndex, bildIndex)}>
-                    <DeleteIcon />
-                  </IconButton>
-                </Grid>
-              ))}
-            </Grid>
+        </label>
+      </div>
+      <ul>
+        {checklist.kontrollpunkter.map((punkt, index) => (
+          <li key={index}>
+            <label>
+              <input
+                type="checkbox"
+                name="utförd"
+                checked={punkt.utförd}
+                onChange={e => handleInputChange(e, index)}
+              />
+              {punkt.punkt}
+            </label>
+            <textarea
+              name="kommentar"
+              value={punkt.kommentar}
+              onChange={e => handleInputChange(e, index)}
+            />
+          </li>
+        ))}
+      </ul>
+      <div>
+        <input type="file" onChange={handleFileUpload} />
+        <ul>
+          {checklist.images && checklist.images.map((url, index) => (
+            <li key={index}>
+              <img src={url} alt={`uploaded-${index}`} style={{ width: '100px' }} />
+              <button onClick={() => handleFileDelete(url)}>Delete</button>
+            </li>
           ))}
-        </div>
-      ))}
-      <Button variant="contained" color="primary" onClick={handleSave}>
-        Spara
-      </Button>
-      <Button variant="contained" color="secondary" onClick={handleExportPDF}>
-        Exportera som PDF
-      </Button>
-      <Button variant="contained" onClick={() => navigate('/')}>
-        Tillbaka
-      </Button>
-    </Container>
+        </ul>
+      </div>
+      <button onClick={handleSave}>Save Checklist</button>
+      <button onClick={handleExportPDF}>Export as PDF</button>
+    </div>
   );
-}
+};
 
 export default Checklist;
