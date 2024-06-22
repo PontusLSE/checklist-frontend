@@ -126,62 +126,59 @@ function Checklist() {
 
   return (
     <div>
-      <Button variant="contained" onClick={handleBack} style={{ marginBottom: '20px' }}>
-        Back to List
-      </Button>
       <Typography variant="h4" gutterBottom>{checklist.projektinformation.projektets_namn}</Typography>
       {checklist.kontrollpunkter.map((kategori, katIndex) => (
         <div key={katIndex}>
-          <Typography variant="h6" gutterBottom>{kategori.kategori}</Typography>
-          <Grid container spacing={3}>
-            {kategori.punkter.map((punkt, punktIndex) => (
-              <Grid item xs={12} key={punktIndex}>
+          <Typography variant="h6">{kategori.kategori}</Typography>
+          {kategori.punkter.map((punkt, punktIndex) => (
+            <Grid container spacing={2} alignItems="center" key={punktIndex}>
+              <Grid item xs={6}>
                 <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={punkt.utförd}
-                      onChange={(e) => handleCheckboxChange(e, katIndex, punktIndex)}
-                    />
-                  }
+                  control={<Checkbox checked={punkt.utförd} onChange={(e) => handleCheckboxChange(e, katIndex, punktIndex)} />}
                   label={punkt.kontrollpunkt}
                 />
+              </Grid>
+              <Grid item xs={6}>
                 <TextField
-                  fullWidth
                   label="Kommentarer"
-                  name={`punkt-${punktIndex}`}
+                  fullWidth
+                  multiline
                   value={punkt.kommentarer}
                   onChange={(e) => handleCommentChange(e, katIndex, punktIndex)}
                 />
+              </Grid>
+              <Grid item xs={12}>
                 <input
                   accept="image/*"
                   style={{ display: 'none' }}
-                  id={`icon-button-file-${katIndex}-${punktIndex}`}
-                  type="file"
+                  id={`file-upload-${katIndex}-${punktIndex}`}
                   multiple
+                  type="file"
                   onChange={(e) => handleFileUpload(e, katIndex, punktIndex)}
                 />
-                <label htmlFor={`icon-button-file-${katIndex}-${punktIndex}`}>
-                  <IconButton color="primary" aria-label="upload picture" component="span">
-                    <PhotoCamera />
-                  </IconButton>
+                <label htmlFor={`file-upload-${katIndex}-${punktIndex}`}>
+                  <Button variant="contained" color="primary" component="span" startIcon={<PhotoCamera />}>
+                    Upload
+                  </Button>
                 </label>
-                <div>
-                  {punkt.bilder.map((bild, bildIndex) => (
-                    <div key={bildIndex} style={{ display: 'flex', alignItems: 'center' }}>
-                      <img src={bild} alt={`upload-${bildIndex}`} style={{ maxWidth: '100px', margin: '5px' }} />
-                      <IconButton color="secondary" onClick={() => handleFileDelete(katIndex, punktIndex, bildIndex)}>
-                        <DeleteIcon />
-                      </IconButton>
-                    </div>
-                  ))}
-                </div>
               </Grid>
-            ))}
-          </Grid>
+              <Grid item xs={12}>
+                {punkt.bilder.map((bild, bildIndex) => (
+                  <div key={bildIndex}>
+                    <img src={bild} alt={`Bild ${bildIndex}`} style={{ maxWidth: '100%' }} />
+                    <IconButton color="secondary" onClick={() => handleFileDelete(katIndex, punktIndex, bildIndex)}>
+                      <DeleteIcon />
+                    </IconButton>
+                  </div>
+                ))}
+              </Grid>
+            </Grid>
+          ))}
         </div>
       ))}
       <Button variant="contained" color="primary" onClick={handleSave}>Save</Button>
-      <Button variant="contained" color="secondary" onClick={handleExportPDF}>Export as PDF</Button>
+      <Button variant="contained" onClick={handleExportPDF}>Export as PDF</Button>
+      <Button variant="contained" onClick={handleBack}>Back</Button>
     </div>
   );
 }
