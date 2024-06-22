@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { useParams, useHistory } from 'react-router-dom';
 import axios from 'axios';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 
-const Checklist = ({ match }) => {
+const Checklist = () => {
+  const { id } = useParams();
+  const history = useHistory();
   const [checklist, setChecklist] = useState({
     projektinformation: {
       kundens_namn: '',
@@ -22,14 +25,14 @@ const Checklist = ({ match }) => {
   useEffect(() => {
     const fetchChecklist = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/checklists/${match.params.id}`);
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/checklists/${id}`);
         setChecklist(response.data);
       } catch (error) {
         console.error('Error fetching checklist:', error);
       }
     };
     fetchChecklist();
-  }, [match.params.id]);
+  }, [id]);
 
   const handleInputChange = (e, index) => {
     const { name, value, type, checked } = e.target;
@@ -86,7 +89,7 @@ const Checklist = ({ match }) => {
 
   const handleSave = async () => {
     try {
-      await axios.put(`${process.env.REACT_APP_API_URL}/checklists/${match.params.id}`, checklist);
+      await axios.put(`${process.env.REACT_APP_API_URL}/checklists/${id}`, checklist);
       alert('Checklist saved successfully');
     } catch (error) {
       console.error('Error saving checklist:', error);
@@ -156,6 +159,7 @@ const Checklist = ({ match }) => {
       </div>
       <button onClick={handleSave}>Spara</button>
       <button onClick={handleExportPDF}>Export as PDF</button>
+      <button onClick={() => history.push('/')}>Tillbaka</button>
     </div>
   );
 };
