@@ -4,6 +4,7 @@ import { Typography, Grid, FormControlLabel, Checkbox, TextField, Button, IconBu
 import { PhotoCamera, Delete as DeleteIcon } from '@mui/icons-material';
 import axios from 'axios';
 import jsPDF from 'jspdf';
+import 'jspdf-autotable';
 
 function Checklist() {
   const { id } = useParams();
@@ -79,13 +80,27 @@ function Checklist() {
 
   const handleExportPDF = () => {
     const doc = new jsPDF();
-    doc.text(`Projekt: ${checklist.projektinformation.projektets_namn}`, 10, 10);
+    doc.addImage('/path/to/logo.png', 'PNG', 10, 10, 50, 50); // Justera vägen till loggan
+    doc.text('Egenkontroll solcellsmontage', 10, 70);
+
+    const projektinfo = checklist.projektinformation;
+    doc.text(`Kundens namn: ${projektinfo.kundens_namn}`, 10, 80);
+    doc.text(`Kundens adress: ${projektinfo.kundens_adress}`, 10, 90);
+    doc.text(`Kundens referens: ${projektinfo.kundens_referens}`, 10, 100);
+    doc.text(`Utförs av: ${projektinfo.utfors_av}`, 10, 110);
+    doc.text(`Arbetsledare: ${projektinfo.arbetsledare}`, 10, 120);
+    doc.text(`Projektets nummer: ${projektinfo.projektets_nummer}`, 10, 130);
+    doc.text(`Projektets namn: ${projektinfo.projektets_namn}`, 10, 140);
+    doc.text(`Aktuellt datum: ${projektinfo.aktuellt_datum}`, 10, 150);
+
     checklist.kontrollpunkter.forEach((kategori, katIndex) => {
-      doc.text(kategori.kategori, 10, 20 + katIndex * 10);
+      doc.addPage();
+      doc.text(kategori.kategori, 10, 20);
       kategori.punkter.forEach((punkt, punktIndex) => {
-        doc.text(`${punkt.kontrollpunkt}: ${punkt.utförd ? 'Ja' : 'Nej'} - ${punkt.kommentarer}`, 10, 30 + punktIndex * 10 + katIndex * 10);
+        doc.text(`${punkt.kontrollpunkt}: ${punkt.utförd ? 'Ja' : 'Nej'} - ${punkt.kommentarer}`, 10, 30 + punktIndex * 10);
       });
     });
+
     doc.save('checklist.pdf');
   };
 
@@ -95,7 +110,7 @@ function Checklist() {
 
   return (
     <Container>
-      <Typography variant="h4" gutterBottom>Checklist</Typography>
+      <Typography variant="h4" gutterBottom>Egenkontroll</Typography>
       {checklist.kontrollpunkter.map((kategori, katIndex) => (
         <div key={katIndex}>
           <Typography variant="h6">{kategori.kategori}</Typography>
@@ -148,13 +163,13 @@ function Checklist() {
         </div>
       ))}
       <Button variant="contained" color="primary" onClick={handleSave}>
-        Save
+        Spara
       </Button>
       <Button variant="contained" color="secondary" onClick={handleExportPDF}>
-        Export as PDF
+        Exportera som PDF
       </Button>
       <Button variant="contained" onClick={() => navigate('/')}>
-        Back
+        Tillbaka
       </Button>
     </Container>
   );
