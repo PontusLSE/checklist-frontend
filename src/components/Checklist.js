@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import jsPDF from 'jspdf';
@@ -9,18 +9,18 @@ const Checklist = () => {
   const navigate = useNavigate();
   const [checklist, setChecklist] = useState(null);
 
-  useEffect(() => {
-    fetchChecklist();
-  }, []);
-
-  const fetchChecklist = async () => {
+  const fetchChecklist = useCallback(async () => {
     try {
       const response = await axios.get(`${process.env.REACT_APP_API_URL}/checklists/${id}`);
       setChecklist(response.data);
     } catch (error) {
       console.error('Error fetching checklist:', error);
     }
-  };
+  }, [id]);
+
+  useEffect(() => {
+    fetchChecklist();
+  }, [fetchChecklist]);
 
   const handleSave = async () => {
     try {
