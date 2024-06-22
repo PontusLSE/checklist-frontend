@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom'; // Byt useHistory till useNavigate
 import axios from 'axios';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 
 const Checklist = () => {
   const { id } = useParams();
-  const history = useHistory();
+  const navigate = useNavigate(); // Använd useNavigate istället för useHistory
   const [checklist, setChecklist] = useState(null);
   const [newComment, setNewComment] = useState('');
   const [newImage, setNewImage] = useState(null);
@@ -112,7 +112,7 @@ const Checklist = () => {
   };
 
   const handleBack = () => {
-    history.push('/');
+    navigate('/'); // Använd navigate istället för history.push
   };
 
   if (!checklist) return <div>Loading...</div>;
