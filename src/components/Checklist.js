@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { jsPDF } from 'jspdf';
@@ -19,7 +19,7 @@ const Checklist = () => {
         aktuellt_datum: ''
     });
 
-    const fetchChecklist = async () => {
+    const fetchChecklist = useCallback(async () => {
         try {
             const response = await axios.get(`${process.env.REACT_APP_API_URL}/checklists/${id}`);
             setChecklist(response.data);
@@ -27,11 +27,11 @@ const Checklist = () => {
         } catch (error) {
             console.error('Error fetching checklist:', error);
         }
-    };
+    }, [id]);
 
     useEffect(() => {
         fetchChecklist();
-    }, [id, fetchChecklist]);
+    }, [fetchChecklist]);
 
     const handleSave = async () => {
         try {
