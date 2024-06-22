@@ -1,0 +1,32 @@
+body {
+  background-color: #FEFCF4; /* Snöstig */
+  font-family: 'IBM Plex Sans', 'IBM Plex Mono', sans-serif;
+  color: #33343C; /* Kol */
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #006D74; /* Blåviken */
+}
+
+button {
+  background-color: #FA9F1C; /* Mandarin */
+  color: #FEFCF4; /* Snöstig */
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #FBCF2C; /* Solkatt */
+}
+
+input, textarea {
+  border: 1px solid #33343C; /* Kol */
+  padding: 5px;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
