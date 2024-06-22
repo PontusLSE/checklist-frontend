@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 
 const Checklist = () => {
   const { id } = useParams();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [checklist, setChecklist] = useState({
     projektinformation: {
       kundens_namn: '',
@@ -159,7 +159,7 @@ const Checklist = () => {
       </div>
       <button onClick={handleSave}>Spara</button>
       <button onClick={handleExportPDF}>Export as PDF</button>
-      <button onClick={() => history.push('/')}>Tillbaka</button>
+      <button onClick={() => navigate('/')}>Tillbaka</button>
     </div>
   );
 };
