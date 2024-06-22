@@ -24,6 +24,17 @@ function Checklist() {
     fetchChecklist();
   }, [id]);
 
+  const handleProjectInfoChange = (event) => {
+    const { name, value } = event.target;
+    setChecklist((prevChecklist) => ({
+      ...prevChecklist,
+      projektinformation: {
+        ...prevChecklist.projektinformation,
+        [name]: value,
+      },
+    }));
+  };
+
   const handleCheckboxChange = (event, katIndex, punktIndex) => {
     const updatedChecklist = { ...checklist };
     updatedChecklist.kontrollpunkter[katIndex].punkter[punktIndex].utförd = event.target.checked;
@@ -80,7 +91,7 @@ function Checklist() {
 
   const handleExportPDF = () => {
     const doc = new jsPDF();
-    doc.addImage('/logga.png', 'PNG', 10, 10, 50, 50); // Justera vägen till loggan
+    doc.addImage('/logga.png', 'PNG', 10, 10, 50, 50);
     doc.text('Egenkontroll solcellsmontage', 10, 70);
 
     const projektinfo = checklist.projektinformation;
@@ -111,6 +122,80 @@ function Checklist() {
   return (
     <Container>
       <Typography variant="h4" gutterBottom>Egenkontroll</Typography>
+      <Grid container spacing={2}>
+        <Grid item xs={12}>
+          <TextField
+            label="Kundens namn"
+            name="kundens_namn"
+            value={checklist.projektinformation.kundens_namn}
+            onChange={handleProjectInfoChange}
+            fullWidth
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            label="Kundens adress"
+            name="kundens_adress"
+            value={checklist.projektinformation.kundens_adress}
+            onChange={handleProjectInfoChange}
+            fullWidth
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            label="Kundens referens"
+            name="kundens_referens"
+            value={checklist.projektinformation.kundens_referens}
+            onChange={handleProjectInfoChange}
+            fullWidth
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            label="Utförs av"
+            name="utfors_av"
+            value={checklist.projektinformation.utfors_av}
+            onChange={handleProjectInfoChange}
+            fullWidth
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            label="Arbetsledare"
+            name="arbetsledare"
+            value={checklist.projektinformation.arbetsledare}
+            onChange={handleProjectInfoChange}
+            fullWidth
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            label="Projektets nummer"
+            name="projektets_nummer"
+            value={checklist.projektinformation.projektets_nummer}
+            onChange={handleProjectInfoChange}
+            fullWidth
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            label="Projektets namn"
+            name="projektets_namn"
+            value={checklist.projektinformation.projektets_namn}
+            onChange={handleProjectInfoChange}
+            fullWidth
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            label="Aktuellt datum"
+            name="aktuellt_datum"
+            value={checklist.projektinformation.aktuellt_datum}
+            onChange={handleProjectInfoChange}
+            fullWidth
+          />
+        </Grid>
+      </Grid>
       {checklist.kontrollpunkter.map((kategori, katIndex) => (
         <div key={katIndex}>
           <Typography variant="h6">{kategori.kategori}</Typography>
