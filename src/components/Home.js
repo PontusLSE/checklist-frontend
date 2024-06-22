@@ -49,7 +49,7 @@ function Home() {
       <List>
         {checklists.map((checklist) => (
           <ListItem key={checklist.id}>
-            <ListItemText primary={checklist.projektinformation.projektets_namn} />
+            <ListItemText primary={checklist.projektinformation ? checklist.projektinformation.projektets_namn : "Unnamed Project"} />
             <ListItemSecondaryAction>
               <IconButton edge="end" component={Link} to={`/checklist/${checklist.id}`}>
                 <Edit />
