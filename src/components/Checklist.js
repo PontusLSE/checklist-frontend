@@ -31,7 +31,7 @@ const Checklist = () => {
 
     useEffect(() => {
         fetchChecklist();
-    }, [id]);
+    }, [id, fetchChecklist]);
 
     const handleSave = async () => {
         try {
