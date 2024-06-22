@@ -38,14 +38,14 @@ function Home() {
     }
   };
 
-  const deleteChecklist = async (id) => {
-    try {
-      await axios.delete(`${process.env.REACT_APP_API_URL}/checklists/${id}`);
-      setChecklists(checklists.filter(checklist => checklist.id !== id));
-    } catch (error) {
-      console.error('Error deleting checklist:', error);
-    }
-  };
+const deleteChecklist = async (id) => {
+  try {
+    await axios.delete(`${process.env.REACT_APP_API_URL}/checklists/${id}`);
+    setChecklists(checklists.filter(checklist => checklist.id !== id));
+  } catch (error) {
+    console.error('Error deleting checklist:', error);
+  }
+};
 
   return (
     <Container>
