@@ -12,7 +12,11 @@ function Home() {
     const fetchChecklists = async () => {
       try {
         const response = await axios.get(`${process.env.REACT_APP_API_URL}/checklists`);
-        setChecklists(response.data);
+        if (Array.isArray(response.data)) {
+          setChecklists(response.data);
+        } else {
+          console.error('Expected an array but got:', response.data);
+        }
       } catch (error) {
         console.error('Error fetching checklists:', error);
       }
